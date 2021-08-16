@@ -17,11 +17,21 @@ const isObject = function(obj) {
   return obj !== null && typeof obj === 'object';
 };
 
+/**
+ * 排序的函数
+ * @param array
+ * @param sortKey
+ * @param reverse
+ * @param sortMethod
+ * @param sortBy
+ * @return {*}
+ */
 export const orderBy = function(array, sortKey, reverse, sortMethod, sortBy) {
   if (!sortKey && !sortMethod && (!sortBy || Array.isArray(sortBy) && !sortBy.length)) {
     return array;
   }
   if (typeof reverse === 'string') {
+    //是否倒叙排序
     reverse = reverse === 'descending' ? -1 : 1;
   } else {
     reverse = (reverse && reverse < 0) ? -1 : 1;

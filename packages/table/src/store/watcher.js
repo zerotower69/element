@@ -5,6 +5,7 @@ import expand from './expand';
 import current from './current';
 import tree from './tree';
 
+// todo:研究排序
 const sortData = (data, states) => {
   const sortingColumn = states.sortingColumn;
   if (!sortingColumn || typeof sortingColumn.sortable === 'string') {
@@ -13,10 +14,16 @@ const sortData = (data, states) => {
   return orderBy(data, states.sortProp, states.sortOrder, sortingColumn.sortMethod, sortingColumn.sortBy);
 };
 
+/**
+ * 数据扁平化
+ * @param columns
+ */
 const doFlattenColumns = (columns) => {
   const result = [];
   columns.forEach((column) => {
     if (column.children) {
+      // apply改变this,并递归扁平化
+      // todo:可以单独拿出来用，方便简洁
       result.push.apply(result, doFlattenColumns(column.children));
     } else {
       result.push(column);
@@ -24,6 +31,7 @@ const doFlattenColumns = (columns) => {
   });
   return result;
 };
+// //
 
 export default Vue.extend({
   data() {
@@ -39,6 +47,7 @@ export default Vue.extend({
         isComplex: false,
 
         // 列
+        // todo:注意不可响应的数据怎么处理才能更好地优化性能！！！
         _columns: [], // 不可响应的
         originColumns: [],
         columns: [],
@@ -53,6 +62,7 @@ export default Vue.extend({
 
         // 选择
         isAllSelected: false,
+        // 多选的时候用来存储选择选项的
         selection: [],
         reserveSelection: false,
         selectOnIndeterminate: false,
@@ -85,11 +95,14 @@ export default Vue.extend({
     updateColumns() {
       const states = this.states;
       const _columns = states._columns || [];
+      // todo:没看得太懂
       states.fixedColumns = _columns.filter((column) => column.fixed === true || column.fixed === 'left');
       states.rightFixedColumns = _columns.filter((column) => column.fixed === 'right');
 
       if (states.fixedColumns.length > 0 && _columns[0] && _columns[0].type === 'selection' && !_columns[0].fixed) {
         _columns[0].fixed = true;
+        // Array.prototype.unshift是为了向数组的头部添加新的元素，并返回添加元素后的数组的长度
+        // todo:写一篇分析Array方法的博客
         states.fixedColumns.unshift(_columns[0]);
       }
 
