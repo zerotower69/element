@@ -178,6 +178,7 @@ const components = [
   CollapseTransition
 ];
 
+/** Vue 要求提供的方法,注册全局的组件,加载原型方法等*/
 const install = function(Vue, opts = {}) {
   locale.use(opts.locale);
   locale.i18n(opts.i18n);

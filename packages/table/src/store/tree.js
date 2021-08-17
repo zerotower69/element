@@ -1,5 +1,8 @@
 import { walkTreeNode, getRowIdentity } from '../util';
 
+/**
+ * 简单理解为处理表单中的树形数据吧，还没怎么用过！！
+ */
 export default {
   data() {
     return {
